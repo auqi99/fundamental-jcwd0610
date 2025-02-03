@@ -1,9 +1,9 @@
 // no 1
-// nested loop (looping di dalam looping)
 function segitiga(height: number) {
   for (let i = 1; i <= height; i++) {
-    let row: string = "";
+    let row: string = ""; // untuk mendefine sebuah variable, ada berapa row nya
 
+    // nested loop (looping di dalam looping)
     for (let j = 1; j <= i; j++) {
       row += j + " ";
     }
@@ -14,21 +14,25 @@ segitiga(5);
 
 // no 2
 // nested loop
-// function triangle(height: number) {
-//   let currentNumber: number = 1;
+function segitiga1(height: number) {
+  let currentNumber: number = 1;
 
-//   for (let i = 1; i <= height; i++) {
-//     let str: string = "";
+  for (let i = 1; i <= height; i++) {
+    let row: string = "";
 
-//     for (let j = 1; j <= i; j++) {
-//       // ternary
-//       str += (currentNumber < 10 ? "0" : "") + currentNumber + " ";
-//     }
-//     currentNumber++;
-//   }
-//   console.log(str);
-// }
-// triangle(5);
+    for (let j = 1; j <= i; j++) {
+      if (currentNumber < 10) {
+        row += "0" + currentNumber + " ";
+      } else {
+        row += currentNumber + " ";
+      }
+      currentNumber++;
+    }
+    console.log(row);
+  }
+}
+
+segitiga1(5);
 
 // no 3
 function fizzBuzz(num: number) {
@@ -52,43 +56,85 @@ function fizzBuzz(num: number) {
 fizzBuzz(15);
 
 // no 4
-const weight: number = 70;
-const height2: number = 1.75;
+function bmi(weight: number, height: number) {
+  const result = weight / (height * height);
 
-// function hasilBMI(weight: number, height: number) {
-//   const result = weight / (height * height);
+  if (result < 18.5) {
+    return "less weight";
+  } else if (result >= 18.5 && result <= 24.9) {
+    return "ideal";
+  } else if (result >= 25.0 && result <= 29.9) {
+    return "overweight";
+  } else if (result >= 30.0 && result <= 39.9) {
+    return "very overweight";
+  } else {
+    return "obesity";
+  }
+}
 
-//   if (result < 18.5) {
-//     return "less weight";
-//   } else if (result >= 18.5 && result <= 24.9) {
-//     return "Ideal";
-//   } else if (result >= 25.0 && result <= 29.9) {
-//     return "Overweight";
-//   } else if (result >=) {
-//     return "Very Overweight";
-//   } else {
-//     return "Obesity";
-//   }
-// }
-// console.log(hasilBMI(weight, height2));
+const weight: number = 55; // in kg
+const height: number = 1.58; // in meters
+
+const hasil = bmi(weight, height);
+console.log(hasil);
 
 // no 5
-// build-in method
-function removeOddNumber(arr: number[]): number[] {
-  return arr.filter((number) => number % 2 === 0);
-}
-const array: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-console.log(removeOddNumber(array));
 
-// tanpa build-in method
-function removeOddNumberManual(arr: number[]): number[] {
-  const temp: number[] = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] % 2 === 0) {
-      temp.push(arr[i]);
+// cara 1
+// build-in method
+function removeOddNumbers(numbers: number[]) {
+  //langsung return (cara 1)
+  return numbers.filter((number) => number % 2 === 0);
+
+  // pake return result (cara lain)
+  // const result = numbers.filter((number) => number % 2 === 0);
+  // return result;
+}
+
+console.log(removeOddNumbers([1, 2, 3, 4, 5, 6, 7, 8, 10]));
+
+// cara 2
+// looping manual
+function removeOddNumbers1(numbers: number[]) {
+  const result: number[] = [];
+
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 2 === 0) {
+      result.push(numbers[i]);
     }
   }
-  return temp;
+
+  return result;
 }
-const array1: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-console.log(removeOddNumberManual(array1));
+
+console.log(removeOddNumbers1([1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]));
+
+// no 6
+// pake built in method
+function splitString(input: string) {
+  return input.split(" ");
+}
+
+console.log(splitString("Hello World"));
+
+// tanpa built in method
+function splitString1(input: string) {
+  const kata: string[] = [];
+  let tempString: string = "";
+
+  for (let i = 0; i < input.length; i++) {
+    if (input[i] === " ") {
+      kata.push(tempString);
+      tempString = "";
+      continue;
+    }
+
+    tempString += input[i];
+  }
+
+  kata.push(tempString);
+
+  console.log(kata);
+}
+
+splitString1("Hello World Purwadhika");
