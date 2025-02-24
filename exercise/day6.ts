@@ -1,97 +1,228 @@
-interface Student{
+/* Create a class to calculate array of student data
+● The object has this following properties :
+○ Name → String
+○ Email → String
+○ Age → Date
+○ Score → Number
+● Parameters : array of student
+● Return values :
+○ Object with this following properties : 
+■ Score
+● Highest ● Lowest ● Average
+■ Age
+● Highest ● Lowest ● Average */
+
+class Student {
   name: string;
   email: string;
-  age: number;
+  age: number; // Age is now a number (year)
   score: number;
+
+  constructor(name: string, email: string, age: number, score: number) {
+    this.name = name;
+    this.email = email;
+    this.age = age;
+    this.score = score;
+  }
 }
 
-const students: Student[] = [
-  {name: "budi", email: "budi@mail.com", age: 20, score: 65},
-  {name: "siti", email: "siti@mail.com", age: 23, score: 70},
-  {name: "jack", email: "jack@mail.com", age: 18, score: 99},
-  {name: "blake", email: "blake@mail.com", age: 45, score: 80},
-];
+interface StudentDataSummary {
+  score: {
+    highest: number;
+    lowest: number;
+    average: number;
+  };
+  age: {
+    highest: number;
+    lowest: number;
+    average: number;
+  };
+}
 
-
-class CalculateStudent {
+class StudentDataCalculator {
   students: Student[];
+
   constructor(students: Student[]) {
-      this.students = students;
+    this.students = students;
   }
 
-  calculate(){
-      let maxScore: number, minScore: number, avgScore: number;
-      let maxAge: number, minAge: number, avgAge: number;
+  calculateSummary(): StudentDataSummary {
+    if (this.students.length === 0) {
+      return {
+        score: { highest: 0, lowest: 0, average: 0 },
+        age: { highest: 0, lowest: 0, average: 0 },
+      };
+    }
 
+    const scores = this.students.map(student => student.score);
+    const ages = this.students.map(student => student.age);
 
-  const sortStudentByScore = this.students.sort((a, b) => a.score - b.score);    
-  const sumStudentScore = this.students.reduce((a, b) => a+ b.score, 0);
-  minScore = sortStudentByScore[0].score;
-  maxScore = sortStudentByScore[sortStudentByScore.length - 1].score;
-  avgScore = sumStudentScore / this.students.length;
+    const highestScore = Math.max(...scores);
+    const lowestScore = Math.min(...scores);
+    const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
 
+    const highestAge = Math.max(...ages);
+    const lowestAge = Math.min(...ages);
+    const averageAge = ages.reduce((sum, age) => sum + age, 0) / ages.length;
 
-  const sortStudentByAge = this.students.sort((a, b) => a.age - b.age);
-  const sumStudentByAge = this.students.reduce((a, b) => a + b.age, 0);
-  minAge = sortStudentByAge[0].age;
-  maxAge = sortStudentByAge [sortStudentByAge.length - 1].age;
-  avgAge = sumStudentByAge / this.students.length;
-
-  return {
+    return {
       score: {
-          highest: maxScore,
-          lowest: minScore,
-          average: avgScore
+        highest: highestScore,
+        lowest: lowestScore,
+        average: averageScore,
       },
       age: {
-          highest: maxAge,
-          lowest: minAge,
-          average: avgAge
-      }
-  };
+        highest: highestAge,
+        lowest: lowestAge,
+        average: averageAge,
+      },
+    };
   }
 }
 
-const CalculateStudents = new CalculateStudent(students);
-console.log(CalculateStudents.calculate());
+// Example Usage:
+const students: Student[] = [
+  new Student("Alice", "alice@example.com", 2002, 95),
+  new Student("Bob", "bob@example.com", 2001, 80),
+  new Student("Charlie", "charlie@example.com", 2003, 90),
+];
 
+const calculator = new StudentDataCalculator(students);
+const summary = calculator.calculateSummary();
+console.log(summary);
 
-// No 2
+const emptyCalculator = new StudentDataCalculator([]);
+const emptySummary = emptyCalculator.calculateSummary();
+console.log(emptySummary);
 
-// class Product {
-//   name: string;
-//   price: number;
+/* Create a program to create transaction
+● Product Class
+○ Properties 
+■ Name
+■ Price
+● Transaction Class
+○ Properties 
+■ Total
+■ Product
+● All product data
+● Qty
+○ Add to cart method → Add product to transaction
+○ Show total method → Show total current transaction
+○ Checkout method → Finalize transaction, return transaction data */
 
-//   constructor(name: string, price: number) {
-//     this.name = name;
-//     this.price = price;
-//   }
-// }
+class Product {
+  name: string;
+  price: number;
+  
+  constructor(name, price) {
+    this.name = name;
+    this.price = price;
+  }
+}
 
-// class Transaction {
-//   private cart: { product: Product; qty: number }[] = [];
-//   private total: number = 0;
+interface ProductInCart {
+  product: Product;
+  quantity: number;
+}
 
-//   addToCart(product: Product, qty: number): void {
-//     this.cart.push({ product, qty });
-//     this.total += product.price * qty;
-//     console.log(`${qty}x ${product.name} added to cart.`);
-//   }
+interface TransactionData {
+  total: number;
+  products: { name: string; price: number; quantity: number }[];
+}
 
-//   showTotal(): void {
-//     console.log(`Current Total: $${this.total.toFixed(2)}`);
-//   }
+class Transaction {
+  total: number = 0;
+  products: ProductInCart[] = [];
 
-//   checkout(): { total: number; products: { name: string; price: number; qty: number }[] } {
-//     if (this.cart.length === 0) {
-//       throw new Error("Cart is empty! Add products before checkout.");
-//     }
+  add_to_cart(product: Product, quantity: number): void {
+    this.products.push({ product, quantity });
+    this.total += product.price * quantity;
+  }
 
-//     const transactionData = {
-//       total: this.total,
-//       products: this.cart.map(item => ({
-//         name: item.product.name,
-//         price: item.product.price,
-//         qty: item.qty,
-//       })),
-//     };
+  show_total(): void {
+    console.log(`Current Total: ${this.total}`);
+  }
+
+  checkout(): TransactionData {
+    const transaction_data: TransactionData = {
+      total: this.total,
+      products: this.products.map(item => ({
+        name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity,
+      })),
+    };
+    return transaction_data;
+  }
+}
+
+// Example Usage
+const product1: Product = new Product("Laptop", 1000);
+const product2: Product = new Product("Mouse", 50);
+
+const transaction: Transaction = new Transaction();
+transaction.add_to_cart(product1, 1);
+transaction.add_to_cart(product2, 2);
+
+transaction.show_total();
+
+const checkout_data: TransactionData = transaction.checkout();
+console.log(checkout_data);
+
+// Discussion
+class Product1 {
+  constructor (public name: string, public price:number) {
+  }
+}
+
+interface Cart {
+product: Product1;
+qty: number;
+}
+
+class Transaction1 {
+  private cart: Cart[] = [];
+  private total: number = 0;
+
+  addToCart(product: Product1, qty: number) {
+    const existingProduct = this.cart.find((item) => item.product.name === product.name);
+
+    if(existingProduct) {
+      existingProduct.qty += qty;
+    } else {
+      this.cart.push({product, qty})
+    }
+
+    this.total = product.price * qty;
+  }
+
+  showCart() {
+    return this.cart;
+  }
+
+  showTotal() {
+    return this.total;
+  }
+
+  checkout(userMoney: number) {
+    if(userMoney < this.total) {
+      return "Uang Kurang"; 
+    } 
+
+    // return "Pembayaran berhasil";
+    return {
+      total: this.total,
+      message: "Transaksi Berhasil",
+      kembalian: userMoney - this.total,
+    }
+  }
+}
+
+const kaos = new Product("Kaos", 20000);
+const jaket = new Product("Jaket", 30000);
+
+const transaction1 = new Transaction1();
+transaction1.addToCart(kaos, 2);
+console.log(transaction1.showCart());
+console.log(transaction1.showTotal());
+console.log(transaction1.checkout(50000))
